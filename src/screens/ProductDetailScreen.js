@@ -1,10 +1,16 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { useCart } from '../context/CartContext';
 
 export default function ProductDetailScreen({ route, navigation }) {
 
     const {produto} = route.params;
     const [quantidade, setQuantidade] = useState(1);
+    const { addToCart } = useCart();
+    const handleAdd = () => {
+        addToCart(produto, quantidade);
+        navigation.navigate('Carrinho');
+    };
 
     return(
         <View style={styles.container}>
@@ -23,8 +29,8 @@ export default function ProductDetailScreen({ route, navigation }) {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.cartButton}>
-                <Text style={styles.cartButtonText}>Adicionar ao Carrinho (R$ {(produto.price * quantidade).toFixed(2)})</Text>
+            <TouchableOpacity style={styles.cartButton} onPress={handleAdd}>
+                <Text style={styles.cartButtonText}>Adicionar ao Carrinho...</Text>
             </TouchableOpacity>
         </View>
     );

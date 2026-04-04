@@ -32,7 +32,7 @@ export default function ProductListScreen({ navigation, route }) {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.productCard}
-                        onPress={() => navigation.navigate('Details', { produto: item })}
+                        onPress={() => navigation.navigate('Detalhes', { produto: item })}
                     >
                         <Text style={styles.productName}>{item.name}</Text>
                         <Text style={styles.productPrice}> R$ {item.price.toFixed(2)}</Text>

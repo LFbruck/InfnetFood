@@ -17,7 +17,7 @@ const CATEGORIAS = [
 export default function HomeScreen({navigation}) {
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Products', { categoryId: item.id, categoryTitle: item.title })}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Produtos', { categoryId: item.id, categoryTitle: item.title })}>
             <Text style={styles.cardText}>{item.title}</Text>
         </TouchableOpacity>
     );
