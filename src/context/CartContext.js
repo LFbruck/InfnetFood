@@ -17,10 +17,14 @@ export function CartProvider({ children }) {
         });
     };
 
+    const removerFromCart = (productId) => {
+        setCart((prevCart) => prevCart.filter(item => item.id !== productId));
+    }
+
     const totalValue = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, totalValue }}>
+        <CartContext.Provider value={{ cart, addToCart, totalValue, removerFromCart}}>
             {children}
         </CartContext.Provider>
     );
