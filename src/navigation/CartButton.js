@@ -15,7 +15,7 @@ export default function CartButton() {
             style={styles.container}
             onPress={() => navigation.navigate('Carrinho')}
         >
-            <Text style={styles.icon}> 🛒 Meu Carrinho </Text>
+            <Text style={styles.icon}>Meu Carrinho | </Text>
             {itemCount > 0 && (
                 <View style={styles.badge}>
                     <Text style={styles.badgeText}>{itemCount}</Text>
@@ -27,7 +27,7 @@ export default function CartButton() {
 
 const styles = StyleSheet.create({
     container: { marginRight: 15, flexDirection: 'row' },
-    icon: { fontSize: 17 },
+    icon: { fontSize: 18 },
     badge: {
         position: 'absolute',
         right: -6,
