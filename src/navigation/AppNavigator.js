@@ -12,6 +12,7 @@ import OrdersScreen from "../screens/OrdersScreen";
 import CartButton from "./CartButton";
 import RestaurantDetailScreen from "../screens/RestaurantDetailScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
+import {useAuth} from "../context/AuthContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,10 +67,12 @@ function HeaderResponsivo({ navigation }) {
 }
 
 export default function AppNavigator() {
+
+    const { isLoggedIn } = useAuth();
+
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName="Login"
                 screenOptions={({ navigation }) => ({
                     headerTitleAlign: "center",
                     headerTintColor: "red",
@@ -79,15 +82,20 @@ export default function AppNavigator() {
                     headerRight: () => <HeaderResponsivo navigation={navigation} />
                 })}
             >
-                <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="Produtos" component={ProductListScreen} />
-                <Stack.Screen name="Detalhes" component={ProductDetailScreen} />
-                <Stack.Screen name="Carrinho" component={CartScreen} options={{ title: "Meu Carrinho" }} />
-                <Stack.Screen name="Perfil" component={ProfileScreen} options={{ title: "Meu Perfil" }} />
-                <Stack.Screen name="Pedidos" component={OrdersScreen} options={{ title: "Meus Pedidos" }} />
-                <Stack.Screen name="DetalhesRestaurante" component={RestaurantDetailScreen} options={{ title: "Sobre o Restaurante" }} />
-                <Stack.Screen name="Checkout" component={CheckoutScreen} options={{ title: "Finalizar Compra" }} />
+                {!isLoggedIn ? (
+                    <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+                ) : (
+                    <>
+                        <Stack.Screen name="Home" component={HomeScreen} />
+                        <Stack.Screen name="Produtos" component={ProductListScreen} />
+                        <Stack.Screen name="Detalhes" component={ProductDetailScreen} />
+                        <Stack.Screen name="Carrinho" component={CartScreen} options={{ title: "Meu Carrinho" }} />
+                        <Stack.Screen name="Perfil" component={ProfileScreen} options={{ title: "Meu Perfil" }} />
+                        <Stack.Screen name="Pedidos" component={OrdersScreen} options={{ title: "Meus Pedidos" }} />
+                        <Stack.Screen name="DetalhesRestaurante" component={RestaurantDetailScreen} options={{ title: "Sobre o Restaurante" }} />
+                        <Stack.Screen name="Checkout" component={CheckoutScreen} options={{ title: "Finalizar Compra" }} />
+                    </>
+                )}
             </Stack.Navigator>
         </NavigationContainer>
     );

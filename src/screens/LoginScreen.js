@@ -1,90 +1,54 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Alert, TouchableOpacity, Platform} from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from "react-native";
+import { useAuth } from "../context/AuthContext";
 
-const MOCK_USER = {
-    email: 'aluno@infnet.edu.br',
-    password: '123456'
-};
+export default function LoginScreen() {
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
 
-export default function LoginScreen( {navigation}) {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const { login } = useAuth();
 
-    const handleLogin =  () => {
+    const handleEntrar = () => {
+        const sucesso = login(email, senha);
 
-        const erroEmailInvalido = "Email invalido! O formato do Email não foi reconhecido. Certifique-se de usar @";
-        const erroSenhaDigitos = "Sua senha é fraca! A senha deve conter pelo menos 6 digitos.";
-
-        const erroCredenciais = "Seu email ou sua senha estão incorretos!"
-
-        if(!email.includes('@')){
-            if (Platform.OS === 'web') {
-                alert(erroEmailInvalido);
+        if (!sucesso) {
+            const mensagemErro = " Use admin e 123.";
+            if (Platform.OS === "web") {
+                window.alert(mensagemErro);
             } else {
-                Alert.alert("Erro", erroEmailInvalido);
+                Alert.alert("Erro", mensagemErro);
             }
-            return;
-
         }
+    };
 
-        if (password.length < 6) {
-            if (Platform.OS === 'web') {
-                alert(erroSenhaDigitos);
-            } else {
-                Alert.alert("Erro", erroSenhaDigitos);
-            }
-            return;
-        }
-
-        if (email === MOCK_USER.email && password === MOCK_USER.password) {
-            navigation.navigate('Home');
-        } else {
-            if (Platform.OS === 'web') {
-                alert(erroCredenciais);
-
-            } else {
-                Alert.alert("Erro", erroCredenciais);
-
-            }
-            return;
-
-        }
-
-        navigation.navigate('Home');
-    }
-
-    return(
+    return (
         <View style={styles.container}>
-            <Text style={styles.title}>InfnetFood</Text>
-            <Text style={styles.text}>Faça seu Login para continuar</Text>
+            <Text style={styles.titulo}>InfnetFood</Text>
 
-            <TextInput
-            style={styles.input}
-            placeholder={"Digite seu E-mail"}
-            keyboardType="email-address"
-            autoCapitalize={"none"}
-            value={email}
-            onChangeText={setEmail}
-            />
+            <View style={styles.cardLogin}>
+                <Text style={styles.subtitulo}>Acesse sua conta</Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder={"Digite sua Senha"}
-                secureTextEntry={true}
-                autoCapitalize={"none"}
-                value={password}
-                onChangeText={setPassword}
-            />
+                <TextInput
+                    style={styles.input}
+                    placeholder="E-mail (digite: admin)"
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize="none"
+                />
 
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Entrar</Text>
-            </TouchableOpacity>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Senha (digite: 123)"
+                    value={senha}
+                    onChangeText={setSenha}
+                    secureTextEntry
+                />
 
-
-
-
-
+                <TouchableOpacity style={styles.botaoEntrar} onPress={handleEntrar}>
+                    <Text style={styles.textoBotao}>Entrar</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -92,45 +56,55 @@ export default function LoginScreen( {navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-
-    },
-    title:{
-        fontSize: 62,
-        fontWeight: 'bold',
-        color: "red"
-
-    },
-    text: {
-        fontSize: 20,
-        color: "#666",
-        marginBottom: 50,
-    },
-    input: {
-        height: 50,
-        borderWidth: 1,
-        borderColor: "#ddd",
-        borderRadius: 8,
-        paddingHorizontal: 20,
-        marginBottom:15,
-        fontSize: 16,
-    },
-    button:{
-        fontSize: 16,
-        marginTop: 5,
-        backgroundColor: "red",
-        height: 35,
+        backgroundColor: "#f5f5f5",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 8,
-        width: 150,
-
+        padding: 20
     },
-    buttonText: {
-        color: "white",
+    titulo: {
+        fontSize: 40,
+        fontWeight: "bold",
+        color: "red",
+        marginBottom: 30
+    },
+    cardLogin: {
+        backgroundColor: "#fff",
+        padding: 25,
+        borderRadius: 12,
+        width: "100%",
+        maxWidth: 400,
+        elevation: 3,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4
+    },
+    subtitulo: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "#333",
+        marginBottom: 20,
+        textAlign: "center"
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        padding: 15,
         fontSize: 16,
-        fontWeight: 'bold',
+        backgroundColor: "#fafafa",
+        marginBottom: 15
+    },
+    botaoEntrar: {
+        backgroundColor: "red",
+        padding: 15,
+        borderRadius: 8,
+        alignItems: "center",
+        marginTop: 10
+    },
+    textoBotao: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold"
     }
-})
+});
