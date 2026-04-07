@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useCart } from '../context/CartContext';
+import React from "react";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { useCart } from "../context/CartContext";
 
-export default function CartScreen() {
-
+export default function CartScreen({ navigation }) {
     const { cart, totalValue, removerFromCart } = useCart();
+
     const renderItem = ({ item }) => (
         <View style={styles.cartItem}>
             <View style={styles.itemInfo}>
@@ -25,7 +25,7 @@ export default function CartScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Meu Pedido </Text>
+            <Text style={styles.title}>Meu Pedido:</Text>
 
             {cart.length === 0 ? (
                 <Text style={styles.empty}>Carrinho vazio...</Text>
@@ -35,13 +35,16 @@ export default function CartScreen() {
                         data={cart}
                         keyExtractor={item => item.id.toString()}
                         renderItem={renderItem}
-                        contentContainerStyle={{ paddingBottom: 20 }}
+                        contentContainerStyle={styles.listContainer}
                     />
 
                     <View style={styles.footer}>
                         <Text style={styles.total}>Total: R$ {totalValue.toFixed(2)}</Text>
-                        <TouchableOpacity style={styles.finalizarBtn}>
-                            <Text style={styles.finalizarText}>Finalizar Compra</Text>
+                        <TouchableOpacity
+                            style={styles.finalizarBtn}
+                            onPress={() => navigation.navigate("Checkout")}
+                        >
+                            <Text style={styles.finalizarText}>Ir para Pagamento</Text>
                         </TouchableOpacity>
                     </View>
                 </>
@@ -54,36 +57,39 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#fff'
+        backgroundColor: "#fff"
     },
     title: {
-        fontSize: 40,
-        fontWeight: 'bold',
-        color: 'red',
+        fontSize: 30,
+        fontWeight: "bold",
+        color: "red",
         marginBottom: 20
     },
     empty: {
-        textAlign: 'center',
+        textAlign: "center",
         marginTop: 50,
         fontSize: 22,
-        color: '#999'
+        color: "#999"
+    },
+    listContainer: {
+        paddingBottom: 20
     },
     cartItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         paddingVertical: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#eee'
+        borderBottomColor: "#eee"
     },
     itemInfo: {
         flex: 1
     },
     itemName: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: "bold"
     },
     itemDetail: {
-        color: '#666',
+        color: "#666",
         marginTop: 5
     },
     removerButton: {
@@ -92,23 +98,31 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     removerText: {
-        fontSize: 19,
-        color: 'red',
-
+        fontSize: 16,
+        color: "red"
     },
     footer: {
         marginTop: 10,
         paddingTop: 20,
         borderTopWidth: 2,
-        borderTopColor: '#eee',
-        backgroundColor: '#fff'
+        borderTopColor: "#eee",
+        backgroundColor: "#fff"
     },
-    total: { fontSize: 26, fontWeight: 'bold', textAlign: 'right', marginBottom: 15 },
+    total: {
+        fontSize: 24,
+        fontWeight: "bold",
+        textAlign: "right",
+        marginBottom: 15
+    },
     finalizarBtn: {
-        backgroundColor: 'red',
+        backgroundColor: "red",
         padding: 15,
         borderRadius: 10,
-        alignItems: 'center'
+        alignItems: "center"
     },
-    finalizarText: { color: 'white', fontWeight: 'bold', fontSize: 18 }
+    finalizarText: {
+        color: "white",
+        fontWeight: "bold",
+        fontSize: 18
+    }
 });

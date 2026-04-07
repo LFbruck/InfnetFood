@@ -11,6 +11,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import OrdersScreen from "../screens/OrdersScreen";
 import CartButton from "./CartButton";
 import RestaurantDetailScreen from "../screens/RestaurantDetailScreen";
+import CheckoutScreen from "../screens/CheckoutScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,7 @@ export default function AppNavigator() {
                 <Stack.Screen name="Perfil" component={ProfileScreen} options={{ title: "Meu Perfil" }} />
                 <Stack.Screen name="Pedidos" component={OrdersScreen} options={{ title: "Meus Pedidos" }} />
                 <Stack.Screen name="DetalhesRestaurante" component={RestaurantDetailScreen} options={{ title: "Sobre o Restaurante" }} />
+                <Stack.Screen name="Checkout" component={CheckoutScreen} options={{ title: "Finalizar Compra" }} />
             </Stack.Navigator>
         </NavigationContainer>
     );
