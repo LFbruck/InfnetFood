@@ -1,18 +1,29 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ScrollView , ActivityIndicator} from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ScrollView, ActivityIndicator } from "react-native";
+import * as Notifications from "expo-notifications";
 
 export default function CheckoutScreen({ navigation }) {
     const [endereco, setEndereco] = useState("");
     const [metodoPagamento, setMetodoPagamento] = useState("");
     const [erroEndereco, setErroEndereco] = useState("");
     const [erroPagamento, setErroPagamento] = useState("");
-
     const [carregando, setCarregando] = useState(false);
+
+    const enviarNotificacao = async () => {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Pedido Confirmado! 🍔",
+                body: "Seu lanche já está sendo preparado e logo sairá para entrega.",
+            },
+            trigger: null,
+        });
+    };
+
     const handleFinalizarCompra = () => {
         let temErro = false;
 
         if (endereco.trim() === "") {
-            setErroEndereco("preencha  endereço de entrega.");
+            setErroEndereco("preencha endereço de entrega.");
             temErro = true;
         }
 
@@ -24,8 +35,10 @@ export default function CheckoutScreen({ navigation }) {
         if (temErro) return;
 
         setCarregando(true);
-        setTimeout(() => {
+
+        setTimeout(async () => {
             setCarregando(false);
+            await enviarNotificacao();
 
             if (Platform.OS === "web") {
                 window.alert("Pedido Confirmado! Sua comida já está sendo preparada. Obrigado pela preferência!!!");
@@ -65,6 +78,7 @@ export default function CheckoutScreen({ navigation }) {
                     setEndereco(texto);
                     setErroEndereco("");
                 }}
+                editable={!carregando}
             />
 
             {erroEndereco !== "" && <Text style={styles.textoErro}>{erroEndereco}</Text>}
@@ -77,6 +91,7 @@ export default function CheckoutScreen({ navigation }) {
                         setMetodoPagamento("Pix");
                         setErroPagamento("");
                     }}
+                    disabled={carregando}
                 >
                     <Text style={[styles.textoBotao, metodoPagamento === "Pix" && styles.textoAtivo]}>Pix</Text>
                 </TouchableOpacity>
@@ -87,6 +102,7 @@ export default function CheckoutScreen({ navigation }) {
                         setMetodoPagamento("Cartão");
                         setErroPagamento("");
                     }}
+                    disabled={carregando}
                 >
                     <Text style={[styles.textoBotao, metodoPagamento === "Cartão" && styles.textoAtivo]}>Cartão</Text>
                 </TouchableOpacity>
@@ -97,6 +113,7 @@ export default function CheckoutScreen({ navigation }) {
                         setMetodoPagamento("Dinheiro");
                         setErroPagamento("");
                     }}
+                    disabled={carregando}
                 >
                     <Text style={[styles.textoBotao, metodoPagamento === "Dinheiro" && styles.textoAtivo]}>Dinheiro</Text>
                 </TouchableOpacity>
@@ -216,7 +233,9 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 8,
         alignItems: "center",
-        marginTop: 10
+        marginTop: 10,
+        flexDirection: "row",
+        justifyContent: "center"
     },
     botaoCarregando: {
         backgroundColor: "#ff6666"

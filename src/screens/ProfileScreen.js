@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Switch } from "react-native";
 
 export default function ProfileScreen() {
-    // Estado local exigido pelo exercício para gerenciar o tema
+
     const [isDarkMode, setIsDarkMode] = useState(false);
 
-    // Variáveis dinâmicas de cor que reagem ao estado
+
     const backgroundColor = isDarkMode ? "#222" : "#fff";
     const textColor = isDarkMode ? "#fff" : "#333";
     const cardColor = isDarkMode ? "#333" : "#f9f9f9";
