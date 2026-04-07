@@ -21,8 +21,23 @@ Projeto final desenvolvido em React Native com Expo para o Instituto Infnet. O a
 - Expo Notifications
 - API ViaCEP (Consumo de API Externa)
 
+## 🔑 Acesso para Testes (Mock)
+
+| Campo | Credencial |
+| :--- | :--- |
+| **E-mail** | `admin` |
+| **Senha** | `123` |
+
+---
+
 ## 📦 Como Executar
 
 1. Instale as dependências:
    ```bash
    npm install
+   npx expo install @react-navigation/native @react-navigation/native-stack expo-notifications
+   npx expo start
+
+
+
+**Desenvolvido com ☕ e React Native por Luiz Filipe Bruck** 🚀
