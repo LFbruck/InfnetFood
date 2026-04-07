@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ScrollView , ActivityIndicator} from "react-native";
 
 export default function CheckoutScreen({ navigation }) {
     const [endereco, setEndereco] = useState("");
@@ -7,6 +7,7 @@ export default function CheckoutScreen({ navigation }) {
     const [erroEndereco, setErroEndereco] = useState("");
     const [erroPagamento, setErroPagamento] = useState("");
 
+    const [carregando, setCarregando] = useState(false);
     const handleFinalizarCompra = () => {
         let temErro = false;
 
@@ -22,18 +23,23 @@ export default function CheckoutScreen({ navigation }) {
 
         if (temErro) return;
 
-        if (Platform.OS === "web") {
-            window.alert("Pedido Confirmado! Sua comida já está sendo preparada. Obrigado pela preferência!!!");
-            navigation.navigate("Home");
-        } else {
-            Alert.alert(
-                "Sucesso",
-                "Pedido Confirmado! Sua comida já está sendo preparada. Obrigado pela preferência!!!",
-                [
-                    { text: "OK", onPress: () => navigation.navigate("Home") }
-                ]
-            );
-        }
+        setCarregando(true);
+        setTimeout(() => {
+            setCarregando(false);
+
+            if (Platform.OS === "web") {
+                window.alert("Pedido Confirmado! Sua comida já está sendo preparada. Obrigado pela preferência!!!");
+                navigation.navigate("Home");
+            } else {
+                Alert.alert(
+                    "Sucesso",
+                    "Pedido Confirmado! Sua comida já está sendo preparada. Obrigado pela preferência!!!",
+                    [
+                        { text: "OK", onPress: () => navigation.navigate("Home") }
+                    ]
+                );
+            }
+        }, 2000);
     };
 
     return (
@@ -98,8 +104,16 @@ export default function CheckoutScreen({ navigation }) {
 
             {erroPagamento !== "" && <Text style={styles.textoErroPagamento}>{erroPagamento}</Text>}
 
-            <TouchableOpacity style={styles.botaoFinalizar} onPress={handleFinalizarCompra}>
-                <Text style={styles.textoBotaoFinalizar}>Confirmar e Fazer Pedido</Text>
+            <TouchableOpacity
+                style={[styles.botaoFinalizar, carregando && styles.botaoCarregando]}
+                onPress={handleFinalizarCompra}
+                disabled={carregando}
+            >
+                {carregando ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.textoBotaoFinalizar}>Confirmar e Fazer Pedido</Text>
+                )}
             </TouchableOpacity>
         </ScrollView>
     );
@@ -203,6 +217,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: "center",
         marginTop: 10
+    },
+    botaoCarregando: {
+        backgroundColor: "#ff6666"
     },
     textoBotaoFinalizar: {
         color: "#fff",
