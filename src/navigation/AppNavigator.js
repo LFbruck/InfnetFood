@@ -10,6 +10,7 @@ import CartScreen from "../screens/CartScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import OrdersScreen from "../screens/OrdersScreen";
 import CartButton from "./CartButton";
+import RestaurantDetailScreen from "../screens/RestaurantDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -52,12 +53,13 @@ function HeaderResponsivo({ navigation }) {
     return (
         <View style={{ flexDirection: "row", alignItems: "center", marginRight: 10 }}>
             <TouchableOpacity onPress={() => navigation.navigate("Pedidos")} style={{ marginRight: 15 }}>
-                <Text style={{ fontSize: 24 }}>📋</Text>
+                <Text style={{ fontSize: 18 }}>Historico de Pedidos |</Text>
             </TouchableOpacity>
+            <CartButton />
             <TouchableOpacity onPress={() => navigation.navigate("Perfil")} style={{ marginRight: 15 }}>
                 <Text style={{ fontSize: 24 }}>👤</Text>
             </TouchableOpacity>
-            <CartButton />
+
         </View>
     );
 }
@@ -71,7 +73,7 @@ export default function AppNavigator() {
                     headerTitleAlign: "center",
                     headerTintColor: "red",
                     headerTitle: () => (
-                        <Text style={{ color: "red", fontWeight: "bold", fontSize: 20 }}>InfnetFood</Text>
+                        <Text style={{ color: "red", fontWeight: "bold", fontSize: 37 }}>InfnetFood</Text>
                     ),
                     headerRight: () => <HeaderResponsivo navigation={navigation} />
                 })}
@@ -83,6 +85,7 @@ export default function AppNavigator() {
                 <Stack.Screen name="Carrinho" component={CartScreen} options={{ title: "Meu Carrinho" }} />
                 <Stack.Screen name="Perfil" component={ProfileScreen} options={{ title: "Meu Perfil" }} />
                 <Stack.Screen name="Pedidos" component={OrdersScreen} options={{ title: "Meus Pedidos" }} />
+                <Stack.Screen name="DetalhesRestaurante" component={RestaurantDetailScreen} options={{ title: "Sobre o Restaurante" }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

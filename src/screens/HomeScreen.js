@@ -25,12 +25,12 @@ const RESTAURANTES_MOCK = [
 ];
 
 export default function HomeScreen({ navigation }) {
-    const { width } = useWindowDimensions();
+    const {width} = useWindowDimensions();
     const isMobile = width < 768;
 
     const abrirNoMapa = async (nome) => {
         const query = encodeURIComponent(`${nome} Centro Rio de Janeiro`);
-        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        const url = `http://googleusercontent.com/maps.google.com/?q=${query}`;
         const suportado = await Linking.canOpenURL(url);
         if (suportado) {
             await Linking.openURL(url);
@@ -53,10 +53,13 @@ export default function HomeScreen({ navigation }) {
                     data={CATEGORIAS}
                     keyExtractor={(item) => item.id.toString()}
                     contentContainerStyle={styles.listContent}
-                    renderItem={({ item }) => (
+                    renderItem={({item}) => (
                         <TouchableOpacity
                             style={styles.cardCategoria}
-                            onPress={() => navigation.navigate("Produtos", { categoryId: item.id, categoryTitle: item.title })}
+                            onPress={() => navigation.navigate("Produtos", {
+                                categoryId: item.id,
+                                categoryTitle: item.title
+                            })}
                         >
                             <Text style={styles.cardText}>{item.title}</Text>
                         </TouchableOpacity>
@@ -66,33 +69,41 @@ export default function HomeScreen({ navigation }) {
 
             <Text style={styles.mapTitle}>Restaurantes Próximos de Voce (Centro - RJ)</Text>
 
-            <View style={[styles.mapSection, { flexDirection: isMobile ? "column" : "row" }]}>
+            <View style={[styles.mapSection, {flexDirection: isMobile ? "column" : "row"}]}>
                 <Image
-                    source={{ uri: "https://static.vecteezy.com/system/resources/previews/000/153/588/original/vector-roadmap-location-map.jpg" }}
-                    style={[styles.imagemMapa, { width: isMobile ? "100%" : "30%", height: isMobile ? 250 : 580 }]}
+                    source={{uri: "https://static.vecteezy.com/system/resources/previews/000/153/588/original/vector-roadmap-location-map.jpg"}}
+                    style={[styles.imagemMapa, {width: isMobile ? "100%" : "30%", height: isMobile ? 250 : 580}]}
                     resizeMode="cover"
                 />
 
-                <View style={[styles.listaRestaurantes, { paddingLeft: isMobile ? 0 : 20, marginTop: isMobile ? 20 : 0 }]}>
+                <View
+                    style={[styles.listaRestaurantes, {paddingLeft: isMobile ? 0 : 20, marginTop: isMobile ? 20 : 0}]}>
                     {RESTAURANTES_MOCK.map((restaurante) => (
-                        <TouchableOpacity
+
+                        <View
                             key={restaurante.id}
-                            style={[styles.cardRestaurante, { width: isMobile ? "100%" : "48%" }]}
-                            onPress={() => abrirNoMapa(restaurante.nome)}
+                            style={[styles.cardRestaurante, {width: isMobile ? "100%" : "48%"}]}
                         >
                             <View style={styles.cardInfo}>
                                 <Text style={styles.restauranteNome}>{restaurante.nome}</Text>
                                 <Text style={styles.restauranteEndereco}>{restaurante.endereco}</Text>
                                 <Text style={styles.restauranteTipo}>{restaurante.tipo}</Text>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate("DetalhesRestaurante", {restaurante: restaurante})}>
+                                    <Text style={styles.textoDetalhes}>+ Detalhes</Text>
+                                </TouchableOpacity>
                             </View>
-                            <Text style={styles.verMapa}>Ver no Mapa📍</Text>
-                        </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => abrirNoMapa(restaurante.nome)}>
+                                <Text style={styles.verMapa}>Ver no Mapa📍</Text>
+                            </TouchableOpacity>
+                        </View>
                     ))}
                 </View>
             </View>
-        </ScrollView>
-    );
+        </ScrollView>);
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -189,5 +200,9 @@ const styles = StyleSheet.create({
     verMapa: {
         fontSize: 14,
         marginLeft: 10
+    },
+    textoDetalhes: {
+        fontSize: 12,
+        marginTop:20,
     }
 });
