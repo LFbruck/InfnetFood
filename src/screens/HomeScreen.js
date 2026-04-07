@@ -14,7 +14,7 @@ const CATEGORIAS = [
 const RESTAURANTES_MOCK = [
     { id: "1", nome: "Confeitaria Colombo", endereco: "R. Gonçalves Dias, 32 - Centro", tipo: "Cafeteria " },
     { id: "2", nome: "Amarelinho da Cinelândia", endereco: "Praça Floriano, 55 - Centro", tipo: "Bar e Restaurante " },
-    { id: "3", nome: "Bar Luiz", endereco: "R. da Carioca, 39 - Centro", tipo: "Alemã 🥨" },
+    { id: "3", nome: "Bar Luiz", endereco: "R. da Carioca, 39 - Centro", tipo: "Comida Alemã " },
     { id: "4", nome: "Rio Minho", endereco: "R. do Ouvidor, 10 - Centro", tipo: "Frutos do Mar " },
     { id: "5", nome: "Hachiko", endereco: "Tv. do Paço, 10 - Centro", tipo: "Japonesa " },
     { id: "6", nome: "Bistrô Ouvidor", endereco: "R. do Ouvidor, 52 - Centro", tipo: "Francesa " },
