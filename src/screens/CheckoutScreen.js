@@ -3,11 +3,34 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, S
 import * as Notifications from "expo-notifications";
 
 export default function CheckoutScreen({ navigation }) {
+    const [cep, setCep] = useState("");
     const [endereco, setEndereco] = useState("");
     const [metodoPagamento, setMetodoPagamento] = useState("");
     const [erroEndereco, setErroEndereco] = useState("");
     const [erroPagamento, setErroPagamento] = useState("");
     const [carregando, setCarregando] = useState(false);
+    const [buscandoCep, setBuscandoCep] = useState(false);
+
+    const buscarCep = async (valor) => {
+        setCep(valor);
+        if (valor.length === 8) {
+            setBuscandoCep(true);
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${valor}/json/`);
+                const data = await response.json();
+                if (!data.erro) {
+                    setEndereco(`${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`);
+                    setErroEndereco("");
+                } else {
+                    setErroEndereco("CEP não encontrado.");
+                }
+            } catch (error) {
+                setErroEndereco("Erro ao buscar CEP.");
+            } finally {
+                setBuscandoCep(false);
+            }
+        }
+    };
 
     const enviarNotificacao = async () => {
         await Notifications.scheduleNotificationAsync({
@@ -69,6 +92,17 @@ export default function CheckoutScreen({ navigation }) {
                 <Text style={styles.resumoTotal}>Total a pagar: R$ 45,90</Text>
             </View>
 
+            <Text style={styles.label}>Buscar Endereço por CEP</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Digite o CEP (apenas números)"
+                value={cep}
+                onChangeText={buscarCep}
+                keyboardType="numeric"
+                maxLength={8}
+            />
+            {buscandoCep && <ActivityIndicator size="small" color="red" style={{ marginBottom: 10 }} />}
+
             <Text style={styles.label}>Endereço de Entrega (*obrigatório)</Text>
             <TextInput
                 style={[styles.input, erroEndereco !== "" && styles.inputErro]}
@@ -80,7 +114,6 @@ export default function CheckoutScreen({ navigation }) {
                 }}
                 editable={!carregando}
             />
-
             {erroEndereco !== "" && <Text style={styles.textoErro}>{erroEndereco}</Text>}
 
             <Text style={styles.label}>Forma de Pagamento (*obrigatório)</Text>
